@@ -25,6 +25,8 @@ func twoSum(nums []int, target int) []int {
 	// index 负责保存map[整数]整数的序列号
 	index := make(map[int]int, len(nums))
 
+	//fmt.Println(index)
+
 	// 通过 for 循环，获取b的序列号
 	for i, b := range nums {
 		// 通过查询map，获取a = target - b的序列号
@@ -50,3 +52,8 @@ func main() {
 
 	fmt.Println(twonub)
 }
+
+/*刚看到题目，没想到用map
+j, ok := index[target-b] 这里用法巧妙，用map的双重返回值来判断
+
+*/
