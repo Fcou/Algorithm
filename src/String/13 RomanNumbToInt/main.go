@@ -80,7 +80,7 @@ func romanToInt(s string) (res int) {
 
 func main() {
 
-	i := romanToInt("IV")
+	i := romanToInt("MCMXCIV")
 
 	fmt.Println("MCMXCIV to int is:", i)
 
