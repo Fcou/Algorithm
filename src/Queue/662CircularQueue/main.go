@@ -122,3 +122,5 @@ func (m *MyCircularQueue) IsFull() bool {
 * param_5 := obj.IsEmpty();
 * param_6 := obj.IsFull();
  */
+
+ //这只是一个普通队列，不是循环队列
