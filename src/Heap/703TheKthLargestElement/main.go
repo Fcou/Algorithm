@@ -26,77 +26,77 @@ package main
 import (
 	"container/heap"
 	"fmt"
-   )
+)
 
 
-   type intHeap []int
+type intHeap []int
 
-   //KthLargest object will be instantiated and called as such: obj := Constructor(k, nums);
+//KthLargest object will be instantiated and called as such: obj := Constructor(k, nums);
    // param_1 := obj.Add(val);
    type KthLargest struct {
 	k    int
 	ih intHeap
-   }
+}
 
-   
-   
-   // Constructor 创建 KthLargest
-   func Constructor(k int, nums []int) KthLargest {
+
+
+// Constructor 创建 KthLargest
+func Constructor(k int, nums []int) KthLargest {
 	h := intHeap(nums)
 	heap.Init(&h)
-   
+
 	for len(h) > k {
-	 heap.Pop(&h)
+	heap.Pop(&h)
 	}
-   
+
 	return KthLargest{
-	 k:  k,
-	 ih: h,
+	k:  k,
+	ih: h,
 	}
-   }
-   
-   // Add 负责添加元素
-   func (kl *KthLargest) Add(val int) int {
+}
+
+// Add 负责添加元素
+func (kl *KthLargest) Add(val int) int {
 	heap.Push(&kl.ih, val)
-   
+
 	if len(kl.ih) > kl.k {
-	 heap.Pop(&kl.ih)
+	heap.Pop(&kl.ih)
 	}
-   
+
 	return kl.ih[0]
-   }
-   
-   
-   
-   func (h intHeap) Len() int {
+}
+
+
+
+func (h intHeap) Len() int {
 	return len(h)
-   }
-   
-   func (h intHeap) Less(i, j int) bool {
+}
+
+func (h intHeap) Less(i, j int) bool {
 	return h[i] < h[j]
-   }
-   
-   func (h intHeap) Swap(i, j int) {
+}
+
+func (h intHeap) Swap(i, j int) {
 	h[i], h[j] = h[j], h[i]
-   }
-   func (h *intHeap) Push(x interface{}) {
-	// Push 使用 *h，是因为
-	// Push 增加了 h 的长度
+}
+func (h *intHeap) Push(x interface{}) {
+// Push 使用 *h，是因为
+// Push 增加了 h 的长度
 	*h = append(*h, x.(int))
-   }
-   
-   func (h *intHeap) Pop() interface{} {
+}
+
+func (h *intHeap) Pop() interface{} {
 	// Pop 使用 *h ，是因为
 	// Pop 减短了 h 的长度
 	res := (*h)[len(*h)-1]
 	*h = (*h)[:len(*h)-1]
 	return res
-   }
+}
 
 
 
-   func main(){
-	
+func main(){
+
 	arr := [] int{4,5,8,2,3,5,10,9}
 	kl := Constructor(4,arr)
 	fmt.Println(kl)
@@ -107,9 +107,9 @@ import (
 	fmt.Println( kl.Add(9),kl )
 	fmt.Println( kl.Add(4) ,kl)
 
-   }
-   
-   //题目的意思就是要求数组从大到小第K大的元素，K初始化定义好，之后固定
-   //Add()方法是插入新元素，通过计算继续返回第K大元素
-   //维护一个前K大元素的数据结构就行，这里选用最小堆，用数组存储
-   //如果比最小堆堆顶小，则舍去新元素，返回堆顶。如果比堆顶大，则删除最小堆，插入新元素，返回堆顶
+}
+
+//题目的意思就是要求数组从大到小第K大的元素，K初始化定义好，之后固定
+//Add()方法是插入新元素，通过计算继续返回第K大元素
+//维护一个前K大元素的数据结构就行，这里选用最小堆，用数组存储
+//如果比最小堆堆顶小，则舍去新元素，返回堆顶。如果比堆顶大，则删除最小堆，插入新元素，返回堆顶
