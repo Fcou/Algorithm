@@ -9,7 +9,7 @@ func removeDuplicatewes(a []int) int {
 			continue
 		}
 		left++
-		a[left], a[right] = a[right], a[left]
+		a[left], a[right] = a[right], a[left] //此调换语法要记住
 	}
 
 	return left + 1
