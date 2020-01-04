@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-//SelectionSort选择排序，每次选出剩下元素中最小的，排在最前面
+//SelectionSort 选择排序，每次选出剩下元素中最小的，排在最前面
 func SelectionSort(nums []int) {
 	lens := len(nums)
 	for i := 0; i < lens; i++ {
