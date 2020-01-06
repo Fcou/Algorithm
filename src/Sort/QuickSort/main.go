@@ -1,6 +1,8 @@
 /*
-append 是个坑
+append 是个坑，切片扩容丢失信息
 算法思想很简单，但数组下标判断很烦，改天再想
+解决切片下标办法，之间弃用append,自己写个需要的数组拼接函数
+以下实现比之前利用left,right下标来回移动，好理解，同时逻辑判断简单，但多用了内存空间
 */
 package main
 
@@ -10,65 +12,48 @@ import (
 
 func QuickSort(nums []int) []int {
 	lens := len(nums)
-	var less []int
-	var big []int
-	var landp []int
 	if lens < 2 {
 		return nums
-	} else {
-		pivot := 0
-		small := 0
+	}
+	var less []int
+	var big []int
+	pivot := nums[0]
 
-		for i := 1; i < lens; i++ {
-
-			if nums[i] <= pivot {
-				small++
-				nums[small], nums[i] = nums[i], nums[small]
-
-			}
-
-		}
-		if small == 0 {
-			big = QuickSort(nums[1:])
-			landp = Combinepivot(less, nums[pivot])
-
-			return Combine(landp, big)
-		} else if small == lens-1 {
-			less = QuickSort(nums[1 : small+1])
-			big = QuickSort(nums[small+1:])
-			landp = Combinepivot(less, nums[pivot])
-
-			return Combine(landp, big)
+	for i := 1; i < lens; i++ {
+		if nums[i] <= pivot {
+			less = append(less, nums[i])
+		} else {
+			big = append(big, nums[i])
 		}
 	}
+
+	return comberArray(comberInt(QuickSort(less), pivot), QuickSort(big))
 }
 
-func Combine(a []int, b []int) []int {
-	lena := len(a)
-	lenb := len(b)
-	s := make([]int, lena+lenb)
-	for index := 0; index < lena; index++ {
-		s[index] = a[index]
-	}
-	for index := 0; index < lenb; index++ {
-		s[lena+index] = b[index]
-	}
-	return s
-}
-func Combinepivot(a []int, b int) []int {
-	lena := len(a)
-	s := make([]int, lena+1)
-	for index := 0; index < lena; index++ {
-		s[index] = a[index]
-	}
+func comberInt(a []int, b int) []int {
 
-	s[lena] = b
-	return s
+	c := make([]int, len(a)+1)
+	for i := 0; i < len(a); i++ {
+		c[i] = a[i]
+	}
+	c[len(a)] = b
+	return c
 }
+
+func comberArray(a []int, b []int) []int {
+
+	c := make([]int, len(a)+len(b))
+	for i := 0; i < len(a); i++ {
+		c[i] = a[i]
+	}
+	for j := 0; j < len(b); j++ {
+		c[len(a)+j] = b[j]
+	}
+	return c
+}
+
 func main() {
-	nums := []int{6, 1}
+	nums := []int{6, 1, 3, 4, 9, 8, 2, 5, 7}
 
-	QuickSort(nums)
-
-	fmt.Println(nums)
+	fmt.Println(QuickSort(nums))
 }
