@@ -47,7 +47,7 @@ func isValid(s string) bool {
 		case '(':
 			stack[top] = c + 1 // '('+1 is ')'
 			top++
-		case '[', '{':       // [ 与 ]，{ 与 } 相差2
+		case '[', '{': // [ 与 ]，{ 与 } 相差2
 			stack[top] = c + 2
 			top++
 		case ')', ']', '}':
@@ -64,7 +64,8 @@ func isValid(s string) bool {
 
 func main() {
 	s := "[[{()}]]"
-	fmt.Println(s, "is valid?   ", isValid(s
+	fmt.Println(s, "is valid?   ", isValid(s))
 }
 
 //后来的先配对，这就是栈的抽象，跟玩俄罗斯方块，消消乐一样
+//还是利用了栈的思想，直接用计数器+对称存储，代码简化了许多
