@@ -1,3 +1,3 @@
-# Algorithm-Golang-
-数据结构、算法积累，Golang版
-有编号的都是LeetCode中题目
+# Algorithm
+#### 记录数据结构、算法，Golang语言编写
+#### 有编号的都是LeetCode中题目
