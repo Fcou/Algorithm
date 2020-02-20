@@ -10,39 +10,6 @@ package main
 
 import "fmt"
 
-//桶内排序
-func sortInBucket(bucket []int) { //元素个数少，此处用插入排序方式，可以用任意其他排序方式
-	length := len(bucket)
-
-	if length == 1 {
-		return
-	}
-
-	for i := 1; i < length; i++ {
-		for j := i - 1; j >= 0; j-- {
-			if bucket[i] < bucket[j] {
-				bucket[i], bucket[j] = bucket[j], bucket[i]
-				i = j
-			} else {
-				break
-			}
-		}
-
-	}
-
-}
-
-//获取数组最大值
-func getMaxInArr(arr []int) int {
-	max := arr[0]
-	for i := 1; i < len(arr); i++ {
-		if arr[i] > max {
-			max = arr[i]
-		}
-	}
-	return max
-}
-
 // bucketSort 桶排序,arr为要排序的数组，e为每个桶中元素期望个数
 func bucketSort(arr []int, e int) {
 	n := len(arr)                 //数组元素个数
@@ -67,6 +34,39 @@ func bucketSort(arr []int, e int) {
 
 			tmpPos += bucketLen
 		}
+	}
+
+}
+
+//getMaxInArr 获取数组最大值
+func getMaxInArr(arr []int) int {
+	max := arr[0]
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > max {
+			max = arr[i]
+		}
+	}
+	return max
+}
+
+//sortInBucket 桶内排序
+func sortInBucket(bucket []int) { //元素个数少，此处用插入排序方式，可以用任意其他排序方式
+	length := len(bucket)
+
+	if length == 1 {
+		return
+	}
+
+	for i := 1; i < length; i++ {
+		for j := i - 1; j >= 0; j-- {
+			if bucket[i] < bucket[j] {
+				bucket[i], bucket[j] = bucket[j], bucket[i]
+				i = j
+			} else {
+				break
+			}
+		}
+
 	}
 
 }
