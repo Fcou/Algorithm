@@ -15,7 +15,7 @@ func bucketSort(arr []int, e int) {
 	n := len(arr)                 //数组元素个数
 	num := n / e                  //桶数
 	max := getMaxInArr(arr) + 1   //max（数组最大值+1）
-	buckets := make([][]int, num) //创建桶空间
+	buckets := make([][]int, num) //创建桶空间，这样分配空间，应该不会有内存碎片问题
 
 	//分配入桶，将数组元素变为【0，1）,乘以桶数就是要放入的桶编号
 	for i := 0; i < len(arr); i++ {
@@ -31,7 +31,6 @@ func bucketSort(arr []int, e int) {
 			sortInBucket(buckets[i])
 
 			copy(arr[tmpPos:], buckets[i])
-
 			tmpPos += bucketLen
 		}
 	}
