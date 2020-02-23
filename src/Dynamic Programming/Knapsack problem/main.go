@@ -44,11 +44,11 @@ func findMaxPrice(c []commodity, totalPrice [][]int, chooseCommodity [][]string)
 				}
 
 			} else if j+1 > c[i].weight {
-				totalPrice[i][j], ok = maxTwoNum(totalPrice[i-1][j], c[i].price+totalPrice[i][j-c[i].weight])
+				totalPrice[i][j], ok = maxTwoNum(totalPrice[i-1][j], c[i].price+totalPrice[i-1][j-c[i].weight])
 				if ok {
 					chooseCommodity[i][j] = chooseCommodity[i-1][j]
 				} else {
-					chooseCommodity[i][j] = c[i].name + " And " + chooseCommodity[i][j-c[i].weight]
+					chooseCommodity[i][j] = c[i].name + " And " + chooseCommodity[i-1][j-c[i].weight]
 				}
 			}
 		}
