@@ -1,4 +1,7 @@
-/* 背包问题 */
+/*
+背包问题
+坑1：二维切片初始化
+*/
 
 package main
 
@@ -9,12 +12,6 @@ type commodity struct {
 	price  int
 	weight int
 }
-
-// type knapsack struct {
-// 	maxCapacity     int
-// 	currentCapacity int
-// 	currentPrice    int
-// }
 
 func maxTwoNum(a, b int) (x int, ok bool) {
 	if a > b {
@@ -28,16 +25,8 @@ func maxTwoNum(a, b int) (x int, ok bool) {
 	}
 }
 
-func main() {
-	var c [3]commodity //商品列表，定义名称，价格，重量，下标代表依次计算判断的顺序
-	c[0] = commodity{name: "guitar", price: 1500, weight: 1}
-	c[1] = commodity{name: "sound", price: 3000, weight: 4}
-	c[2] = commodity{name: "laptop", price: 2000, weight: 3}
-
-	totalPrice := [3][4]int{}         //初始化总价格矩阵
-	chooseCommodity := [3][4]string{} //初始化组成最高价的商品矩阵
+func findMaxPrice(c []commodity, totalPrice [][]int, chooseCommodity [][]string) {
 	ok := true
-
 	for i := 0; i < len(totalPrice); i++ {
 		for j := 0; j < len(totalPrice[i]); j++ {
 			if j+1 >= c[i].weight && i == 0 {
@@ -64,6 +53,25 @@ func main() {
 			}
 		}
 	}
+}
+
+func main() {
+	var c []commodity //初始化商品列表，定义名称，价格，重量，下标代表依次计算判断的顺序
+	c = append(c, commodity{name: "guitar", price: 1500, weight: 1})
+	c = append(c, commodity{name: "sound", price: 3000, weight: 4})
+	c = append(c, commodity{name: "laptop", price: 2000, weight: 3})
+
+	totalPrice := make([][]int, 3) //初始化总价格3*4矩阵
+	for i := 0; i < len(totalPrice); i++ {
+		totalPrice[i] = make([]int, 4)
+	}
+	chooseCommodity := make([][]string, 3) //初始化组成最高价的商品3*4矩阵
+	for i := 0; i < len(totalPrice); i++ {
+		chooseCommodity[i] = make([]string, 4)
+	}
+
+	findMaxPrice(c, totalPrice, chooseCommodity)
+
 	for i := 0; i < len(totalPrice); i++ {
 		fmt.Println(totalPrice[i])
 	}
