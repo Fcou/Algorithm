@@ -17,6 +17,7 @@ func QuickSort(nums []int) []int {
 	}
 	var less []int
 	var big []int
+
 	pivot := nums[0]
 
 	for i := 1; i < lens; i++ {
