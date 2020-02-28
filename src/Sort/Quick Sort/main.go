@@ -54,7 +54,7 @@ func comberArray(a []int, b []int) []int {
 }
 
 func main() {
-	nums := []int{6, 1, 3, 4, 9, 8, 2, 5, 7}
+	nums := []int{6, 1, 3, 4, 9, 8, 2, 5, 7, 99, 47, 87, 34}
 
 	fmt.Println(QuickSort(nums))
 }
