@@ -14,7 +14,7 @@ func quickSort(nums []int) {
 	if size < 2 {
 		return
 	}
-	pivot := rand.Intn(size - 1)
+	pivot := rand.Intn(size)
 	nums[size-1], nums[pivot] = nums[pivot], nums[size-1]
 
 	pivot = size - 1
