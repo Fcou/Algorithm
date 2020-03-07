@@ -2,7 +2,7 @@
 //堆接口组合了 sort.Interface, 而sort.Interface，需要实现三个方法：
 //Len() int /   Less(i, j int) bool  /  Swap(i, j int)
 //再加上堆接口定义的两个方法：Push(x interface{})   /  Pop() interface{}。
-//只要实现了上面这五个方法，定义了一个堆。
+//只要实现了上面这五个方法，定义了一个最小堆。
 
 // Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
