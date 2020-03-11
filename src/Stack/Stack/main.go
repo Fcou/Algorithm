@@ -36,6 +36,7 @@ func (stack *myStack) Pop() (q status) {
 	if stack.first == stack.end {
 		stack.first = nil
 		stack.end = nil
+		return
 	}
 	for {
 		if tem.next == stack.end {
