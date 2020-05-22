@@ -23,6 +23,15 @@ func insertionSort(a []int, n int) {
 	}
 }
 
+// 源码
+// func insertionSort(data Interface, a, b int) {
+// 	for i := a + 1; i < b; i++ {
+// 		for j := i; j > a && data.Less(j, j-1); j-- {
+// 			data.Swap(j, j-1)
+// 		}
+// 	}
+// }
+
 func main() {
 	nums := []int{2, 4, 77, 3, 99, 23, 4, 1, 8, 42, 14, 56}
 	insertionSort(nums, len(nums))

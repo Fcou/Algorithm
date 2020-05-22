@@ -39,5 +39,64 @@
 最坏时间  O(nlogn)      O(n)         O(n)
 平均时间  O(n)          O(n)         O(n)
 
+堆排序和快速排序都有比较多的应用，比如 Java 语言采用堆排序实现排序函数，C 语言使用快速排序实现排序函数。
+不知道你有没有发现，使用归并排序的情况其实并不多。我们知道，快排在最坏情况下的时间复杂度是 O(n2)，
+而归并排序可以做到平均情况、最坏情况下的时间复杂度都是 O(nlogn)，从这点上看起来很诱人，那为什么它还是没能得到“宠信”呢？
+还记得我们上一节讲的归并排序的空间复杂度吗？归并排序并不是原地排序算法，空间复杂度是 O(n)。
+所以，粗略点、夸张点讲，如果要排序 100MB 的数据，除了数据本身占用的内存之外，排序算法还要额外再占用 100MB 的内存空间，空间耗费就翻倍了。
 
+如何优化快速排序？
+这种 O(n2) 时间复杂度出现的主要原因还是因为我们分区点选的不够合理。
+那什么样的分区点是好的分区点呢？或者说如何来选择分区点呢？
+最理想的分区点是：被分区点分开的两个分区中，数据的数量差不多。
+1. 三数取中法    我们从区间的首、尾、中间，分别取出一个数，然后对比大小，取这 3 个数的中间值作为分区点
+2. 随机法       随机法就是每次从要排序的区间中，随机选择一个元素作为分区点。
+
+在小规模数据面前，O(n2) 时间复杂度的算法并不一定比 O(nlogn) 的算法执行时间长。
+
+Glibc 中的 qsort() 函数举例说明一下。虽说 qsort() 从名字上看，很像是基于快速排序算法实现的，实际上它并不仅仅用了快排这一种算法。
+算法组合，分情况解决问题
+对于小数据量的排序，qsort() 会优先使用归并排序来排序输入数据
+要排序的数据量比较大的时候，qsort() 会改为用快速排序算法来排序
+在快速排序的过程中，当要排序的区间中，元素的个数小于等于 4 时，qsort() 就退化为插入排序，不再继续用递归来做快速排序
+
+"golang标准库中的Sort用的是 堆排序+快速排序+希尔排序+插入排序"
+
+// Sort sorts data.
+// It makes one call to data.Len to determine n, and O(n*log(n)) calls to
+// data.Less and data.Swap. The sort is not guaranteed to be stable.
+func Sort(data Interface) {
+	n := data.Len()
+	quickSort(data, 0, n, maxDepth(n))
+}
+
+func quickSort(data Interface, a, b, maxDepth int) {
+	for b-a > 12 { // Use ShellSort for slices <= 12 elements
+		if maxDepth == 0 {
+			heapSort(data, a, b)
+			return
+		}
+		maxDepth--
+		mlo, mhi := doPivot(data, a, b)
+		// Avoiding recursion on the larger subproblem guarantees
+		// a stack depth of at most lg(b-a).
+		if mlo-a < b-mhi {
+			quickSort(data, a, mlo, maxDepth)
+			a = mhi // i.e., quickSort(data, mhi, b)
+		} else {
+			quickSort(data, mhi, b, maxDepth)
+			b = mlo // i.e., quickSort(data, a, mlo)
+		}
+	}
+	if b-a > 1 {
+		// Do ShellSort pass with gap 6
+		// It could be written in this simplified form cause b-a <= 12
+		for i := a + 6; i < b; i++ {
+			if data.Less(i, i-6) {
+				data.Swap(i, i-6)
+			}
+		}
+		insertionSort(data, a, b)
+	}
+}
 
