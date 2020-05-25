@@ -1,3 +1,50 @@
+以下所有排序都是基于  数组  这种数据结构！！！！！！
+其他数据结构不适用，那么问题来了，其他数据结构如何排序？
+把信息都转化为 struct数组
+
+
+type Interface interface {
+    // Len方法返回集合中的元素个数
+    Len() int
+    // Less方法报告索引i的元素是否比索引j的元素小
+    Less(i, j int) bool
+    // Swap方法交换索引i和j的两个元素
+    Swap(i, j int)
+}
+
+package sort_test
+import (
+    "fmt"
+    "sort"
+)
+type Person struct {
+    Name string
+    Age  int
+}
+func (p Person) String() string {
+    return fmt.Sprintf("%s: %d", p.Name, p.Age)
+}
+// ByAge implements sort.Interface for []Person based on
+// the Age field.
+type ByAge []Person
+func (a ByAge) Len() int           { return len(a) }
+func (a ByAge) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByAge) Less(i, j int) bool { return a[i].Age < a[j].Age }
+func Example() {
+    people := []Person{
+        {"Bob", 31},
+        {"John", 42},
+        {"Michael", 17},
+        {"Jenny", 26},
+    }
+    fmt.Println(people)
+    sort.Sort(ByAge(people))
+    fmt.Println(people)
+    // Output:
+    // [Bob: 31 John: 42 Michael: 17 Jenny: 26]
+    // [Michael: 17 Jenny: 26 Bob: 31 John: 42]
+}
+
 1. 最好情况、最坏情况、平均情况时间复杂度
 
 2. 时间复杂度的系数、常数 、低阶
