@@ -19,7 +19,7 @@ func Constructor(k int) *Graph { //初始化图
 		v:   k,
 		adj: make([]*list.List, k),
 	}
-	for i := 0; i < k; i++ {
+	for i := 0; i < k; i++ { //注意初始化
 		g.adj[i] = list.New().Init()
 	}
 	return g
