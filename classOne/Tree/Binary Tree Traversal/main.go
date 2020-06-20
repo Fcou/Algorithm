@@ -9,7 +9,7 @@ type tnode struct {
 	parent *tnode
 }
 
-//三种递归遍历方法
+//树的前中后三种递归遍历方法-属于深度优先遍历
 //pre_order 前序遍历，先根，然后左子树，最后右子树
 func pre_order(treeRootNode *tnode) {
 	if treeRootNode != nil {
