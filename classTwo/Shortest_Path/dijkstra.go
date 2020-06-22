@@ -66,8 +66,7 @@ func Dijkstra(s, t int, g *Graph) {
 			index: i,
 		}
 	}
-	heap.Init(&pq)               // 初始化小顶堆
-	inqueue := make([]bool, g.v) // 标记是否进入过队列,更新堆时有用
+	heap.Init(&pq) // 初始化小顶堆
 
 	vertexes[s].dist = 0 // 更新起点s的dist为0
 	item := &Item{
@@ -75,10 +74,8 @@ func Dijkstra(s, t int, g *Graph) {
 		dist: vertexes[s].dist,
 	}
 	heap.Push(&pq, item) // 更新起点s的dist为0，不直接利用修改，没办法直接修改
-	inqueue[s] = true
-	//pq.update(item, item.id, 0)
 
-	for pq.Len() > 0 {
+	for {
 		minVertex := heap.Pop(&pq).(*Item) // 取堆顶元素并删除
 		if minVertex.id == t {             // 最短路径产生了
 			break
@@ -87,21 +84,23 @@ func Dijkstra(s, t int, g *Graph) {
 			edge := e.Value.(*Edge)          // 取出一条minVetex顶点相连的边
 			nextVertex := vertexes[edge.tid] // minVertex-->nextVertex，获取min顶点指向的下一个next顶点的Vertex
 			if minVertex.dist+edge.w < nextVertex.dist {
-				nextVertex.dist = minVertex.dist + edge.w // 更新next的dist
-				vertexes[nextVertex.id].dist = nextVertex.dist
-				predecessor[nextVertex.id] = minVertex.id // 记录前驱顶点
+				nextVertex.dist = minVertex.dist + edge.w
+				vertexes[nextVertex.id].dist = nextVertex.dist // 更新next的dist
+				predecessor[nextVertex.id] = minVertex.id      // 记录前驱顶点
 				item := &Item{
 					id:   nextVertex.id,
 					dist: nextVertex.dist,
 				}
-				heap.Push(&pq, item) // 更新nextVertex.id的dist为 minVertex.dist + edge.w
-				inqueue[nextVertex.id] = true
+				heap.Push(&pq, item) // 更新堆，nextVertex.id的dist为 minVertex.dist + edge.w
 			}
 		}
 	}
 	// 输出最短路径
 	fmt.Printf("%d ", s)
 	print(s, t, predecessor)
+
+	// 输出每个顶点到s顶点的最短距离
+	fmt.Println()
 	for i := 0; i < len(vertexes); i++ {
 		fmt.Printf("%d:%d\n", i, vertexes[i])
 	}

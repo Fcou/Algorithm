@@ -19,7 +19,7 @@ type PriorityQueue []*Item
 
 func (pq PriorityQueue) Len() int { return len(pq) }
 func (pq PriorityQueue) Less(i, j int) bool {
-	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
+	// 我们需要最小优先队列
 	return pq[i].dist < pq[j].dist
 }
 func (pq PriorityQueue) Swap(i, j int) {
@@ -48,37 +48,3 @@ func (pq *PriorityQueue) update(item *Item, id int, dist int) {
 	item.dist = dist
 	heap.Fix(pq, item.index)
 }
-
-// func TestExample_priorityQueue(t *testing.T) {
-// 	// Some items and their priorities.
-// 	items := map[int]int{
-// 		0: 3, 1: 11, 2: 4,
-// 	}
-// 	// Create a priority queue, put the items in it, and
-// 	// establish the priority queue (heap) invariants.
-// 	pq := make(PriorityQueue, len(items))
-// 	i := 0
-// 	for id, dist := range items {
-// 		pq[i] = &Item{
-// 			id:    id,
-// 			dist:  dist,
-// 			index: i,
-// 		}
-// 		i++
-// 	}
-// 	heap.Init(&pq)
-// 	// // Insert a new item and then modify its priority.
-// 	// item := &Item{
-// 	// 	id:   3,
-// 	// 	dist: 1,
-// 	// }
-// 	// heap.Push(&pq, item)
-// 	pq.update(pq[0], 0, 99)
-// 	// Take the items out; they arrive in decreasing priority order.
-// 	for pq.Len() > 0 {
-// 		item := heap.Pop(&pq).(*Item)
-// 		fmt.Printf("dist:%d-id:%d    ", item.dist, item.id)
-// 	}
-// 	// Output:
-// 	// 05:orange 04:pear 03:banana 02:apple
-// }
