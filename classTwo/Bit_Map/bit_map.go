@@ -5,9 +5,9 @@ type BitMap struct {
 	nbits int
 }
 
-func (b *BitMap) newBitMap(nbits int) {
-	b.nbits = nbits
-	b.bytes = make([]byte, nbits/8+1) // Go中byte类型占8bit，也即是1个字节
+func newBitMap(nbits int) *BitMap {
+	bytes := make([]byte, nbits/8+1) // Go中byte类型占8bit，也即是1个字节
+	return &BitMap{nbits: nbits, bytes: bytes}
 }
 
 // 存在数字k
