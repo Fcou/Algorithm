@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-//bc: pattern char index hash mapping  坏字符规则，快速定位
+//bc: pattern char index hash mapping  坏字符规则，快速定位在模式串中最后出现位置
 func generateBC(pattern string) []int {
 
 	bc := make([]int, 256) // 数组的下标对应字符的 ASCII 码值
@@ -22,28 +22,30 @@ func generateBC(pattern string) []int {
 }
 
 //generate suffix and prefix array for pattern
+// 模式串 [0, m-1]
+// 子串 [0,m-2]
 func generateGS(pattern string) ([]int, []bool) {
 	m := len(pattern)
-	suffix := make([]int, m)
-	prefix := make([]bool, m)
+	suffix := make([]int, m)  //如果公共后缀子串的长度是 k，那我们就记录 suffix[k]=j（j 表示公共后缀子串的起始下标）
+	prefix := make([]bool, m) //如果 j 等于 0，也就是说，公共后缀子串也是模式串的前缀子串，我们就记录 prefix[k]=true。
 
 	//init
 	for i := 0; i < m; i++ {
 		suffix[i] = -1
 		prefix[i] = false
 	}
-	// 依次匹配后缀子串在模式串中的重复开始下标，长度从 1 到 m-1（好字符长度最多是m-1,如果是m说明已经匹配，坏字符已考虑此情况）
+	// 我们拿下标从 0 到 i 的子串（i 可以是 0 到 m-2）与整个模式串，求公共后缀子串。
 	for i := 0; i < m-1; i++ {
 		j := i // j来控制后缀子串长度
 		k := 0
-		//            从下标0开始向          从最后向前
+		//            从子串最后向前        从模式串最后向前
 		for j >= 0 && pattern[j] == pattern[m-1-k] {
 			j--
 			k++
-			suffix[k] = j + 1
+			suffix[k] = j + 1 //j--后要+1
 		}
 
-		if j == -1 { // 说明公共后缀子串也是模式串的前缀子串
+		if j == -1 { // 说明公共后缀子串也是模式串的前缀子串，j--了，从0变成了-1
 			prefix[k] = true //方便在好后缀的后缀子串中，查找最长的、能跟模式串前缀子串匹配的后缀子串
 		}
 	}
@@ -57,19 +59,19 @@ func moveByGS(patternLength int, badCharStartIndex int, suffix []int, prefix []b
 	//length of good suffix 好字符串的长度
 	k := patternLength - badCharStartIndex - 1
 
-	//complete match 说明完全匹配成功
+	//complete match 说明模式串前缀有和好字符串相同的部分
 	if suffix[k] != -1 {
 		return badCharStartIndex + 1 - suffix[k] // 向后滑动几位
 	}
 
-	//partial match  没有完全匹配，要查找最长的、能跟模式串前缀子串匹配的后缀子串
+	//partial match  没有完全匹配，要查找最长的、能跟模式串前缀子串匹配的好字符串的后缀子串
 	for t := patternLength - 1; t > badCharStartIndex+1; t-- { // 从长到短遍历
 		if prefix[t] {
 			return t
 		}
 	}
 
-	//no match
+	//no match 都不匹配，则移动整个模式串长度
 	return patternLength
 
 }
@@ -87,23 +89,23 @@ func bmSearch(main string, pattern string) int {
 	m := len(pattern)
 
 	// i : start index of main string i表示主串与模式串对齐的第一个字符下标
-	step := 1 // 向后移动几位
-	for i := 0; i <= n-m; i = i + step {
+	step := 1                            // 向后移动几位
+	for i := 0; i <= n-m; i = i + step { //根据之前得到的移动位数，向后移动
 		subStr := main[i : i+m]                  //截取主串，开始比较
 		k, j := findBadChar(subStr, pattern, bc) // 判断坏字符规则
 
 		stepForBC := j - k // 相减得到坏字符情况下的后滑几位
 		//j is bad char occur index
 		if j == -1 {
-			return i //匹配成功，返回i
+			return i //没有坏字符，匹配成功，返回i
 		}
 
 		stepForGS := -1
 		if j < m-1 {
-			stepForGS = moveByGS(m, j, suffix, prefix)
+			stepForGS = moveByGS(m, j, suffix, prefix) // 好后缀情况下的后滑几位，j是坏字符对应在模式串中的下标，m是模式串长度
 		}
 
-		//k is bad char index in pattern 比较好、坏字符规则最大移动位数
+		//k is bad char index in pattern 比较好后缀、坏字符规则二者中的最大移动位数
 		step = int(math.Max(float64(stepForBC), float64(stepForGS)))
 	}
 
