@@ -4,14 +4,16 @@ import (
 	"fmt"
 )
 
+// 用来存储模式串中每个前缀（这些前缀都有可能是好前缀）的最长可匹配前缀子串的结尾字符下标。
+// 我们可以考察完所有的 b[0, i-1]的可匹配后缀子串 b[y, i-1]，直到找到一个可匹配的后缀子串，它对应的前缀子串的下一个字符等于 b[i]，那这个 b[y, i]就是 b[0, i]的最长可匹配后缀子串。
 func getNexts(pattern string) []int {
 	m := len(pattern)       // 模式串长度
-	nexts := make([]int, m) //如果 next[i-1]=k-1，也就是说，子串 b[0, k-1]是 b[0, i-1]的最长可匹配前缀子串。
+	nexts := make([]int, m) //如果 next[i]=k，也就是说，子串 b[0, k]是 b[0, i]的最长可匹配前缀子串。
 	for index := range nexts {
-		nexts[index] = -1 // 初始化为-1
+		nexts[index] = -1 // 初始化为-1，代表不存在匹配情况
 	}
 	//假设已知nexts[i-1],利用nexts[i-1]求nexts[i],类似动态规划思想
-	for i := 1; i < m-1; i++ {
+	for i := 1; i < m-1; i++ { // nexts[0] = -1, i从1开始即可
 		j := nexts[i-1] // pattern[0,j] 是pattern[0, i-1]的最长可匹配前缀子串
 
 		for pattern[j+1] != pattern[i] && j >= 0 { // 下一位不相等,这个时候就不能简单地通过 next[i-1]得到 next[i]了
@@ -45,7 +47,7 @@ func findByKMP(s string, pattern string) int {
 			j = nexts[j-1] + 1 // 根据nexts数组计算出，模式串[0,j-1]的最长可匹配前缀子串+1位开始和主串i比较
 		}
 
-		if s[i] == pattern[j] { //一定相等，不相等则跳不出上面的循环,或在j==0
+		if s[i] == pattern[j] { //一定相等，不相等则跳不出上面的循环,或j==0
 			if j == m-1 { // 已完全匹配
 				return i - m + 1
 			}
