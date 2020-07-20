@@ -33,27 +33,28 @@ func (ac *AcAutoMachine) AddPattern(pattern string) {
 	iter := ac.root
 	for _, c := range chars {
 		if _, ok := iter.next[c]; !ok {
-			iter.next[c] = newAcNode()
+			iter.next[c] = newAcNode() //不存在，则建立新节点
 		}
 		iter = iter.next[c]
 	}
 	iter.isPattern = true
 }
 
+//失败指针的构建过程，是一个按层遍历树的过程
 func (ac *AcAutoMachine) Build() {
 	queue := []*AcNode{}
-	queue = append(queue, ac.root)
+	queue = append(queue, ac.root) //层次遍历
 	for len(queue) != 0 {
 		parent := queue[0]
 		queue = queue[1:]
 
 		for char, child := range parent.next {
 			if parent == ac.root {
-				child.fail = ac.root
+				child.fail = ac.root //第一层都指向root
 			} else {
-				failAcNode := parent.fail
+				failAcNode := parent.fail //利用前一个节点来构建其子节点
 				for failAcNode != nil {
-					if _, ok := failAcNode.next[char]; ok {
+					if _, ok := failAcNode.next[char]; ok { //直到找到下个节点==char
 						child.fail = parent.fail.next[char]
 						break
 					}
